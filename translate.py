@@ -379,19 +379,25 @@ def openai_models_to_ollama_ps(oai: dict) -> dict:
     return {"models": models}
 
 
-def openai_models_to_ollama_show(oai: dict, name: str) -> Optional[dict]:
+def openai_models_to_ollama_show(oai: dict, name: str, context_length: int = 32768) -> Optional[dict]:
     """Find a model by name and return an Ollama /api/show response, or None."""
     # Strip Ollama tag suffix (e.g. "llama3:latest" -> "llama3") for fallback matching
     base_name = name.split(":")[0]
     for m in oai.get("data", []):
         model_id = m.get("id", "")
         if model_id == name or model_id == base_name:
+            details = _guess_details(model_id)
+            arch = details.get("family", "")
+            model_info: dict = {"llm.context_length": context_length}
+            if arch:
+                model_info["general.architecture"] = arch
+                model_info[f"{arch}.context_length"] = context_length
             return {
                 "modelfile": "",
                 "parameters": "",
                 "template": "",
-                "details": _guess_details(model_id),
-                "model_info": {},
+                "details": details,
+                "model_info": model_info,
                 "capabilities": ["completion", "tools"],
                 "name": name,
             }

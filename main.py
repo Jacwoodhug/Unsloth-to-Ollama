@@ -24,6 +24,7 @@ UNSLOTH_BASE_URL: str = os.getenv("UNSLOTH_BASE_URL", "http://localhost:8000")
 UNSLOTH_API_KEY: str = os.getenv("UNSLOTH_API_KEY", "")
 PROXY_HOST: str = os.getenv("PROXY_HOST", "0.0.0.0")
 PROXY_PORT: str = os.getenv("PROXY_PORT", "11434")
+MODEL_CONTEXT_LENGTH: int = int(os.getenv("MODEL_CONTEXT_LENGTH", "32768"))
 
 
 # ---------------------------------------------------------------------------
@@ -289,7 +290,7 @@ async def api_show(request: Request):
     name: str = body.get("model") or body.get("name", "")
     client: httpx.AsyncClient = request.app.state.client
     response = await _proxy_get(client, "/v1/models")
-    result = translate.openai_models_to_ollama_show(response.json(), name)
+    result = translate.openai_models_to_ollama_show(response.json(), name, MODEL_CONTEXT_LENGTH)
     if result is None:
         return JSONResponse({"error": "model not found"}, status_code=404)
     return result
