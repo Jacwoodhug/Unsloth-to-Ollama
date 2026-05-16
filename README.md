@@ -1,4 +1,4 @@
-# Unsloth-to-Ollama Proxy
+# Ollama-to-Unsloth Proxy
 
 A FastAPI proxy server that translates Ollama API requests to Unsloth's OpenAI-compatible API.
 
