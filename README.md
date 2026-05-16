@@ -65,29 +65,17 @@ You can also manually edit your VS Code user settings (`Ctrl+,` → click the `{
 
 ```json
 {
+    "unsloth.baseUrl": "http://localhost:8888",
     "unsloth.apiKey": "your_api_key_here",
     "unsloth.contextLength": 65536
 }
 ```
 
-> **Note**: Only `UNSLOTH_API_KEY` and `MODEL_CONTEXT_LENGTH` support VS Code settings. Other settings (`UNSLOTH_BASE_URL`, `PROXY_HOST`, `PROXY_PORT`) must be configured via `.env`.
+> **Note**: `UNSLOTH_BASE_URL`, `UNSLOTH_API_KEY`, and `MODEL_CONTEXT_LENGTH` can be configured via VS Code settings or `.env`. The other settings (`PROXY_HOST`, `PROXY_PORT`) must be configured via `.env` only.
 
 ## Usage
 
 Run `run.bat` to start the proxy server. The server will be available at `http://localhost:11434`.
-
-## Initializing VS Code Settings
-
-To set up VS Code user settings for the first time, run:
-
-```bash
-python init_settings.py
-```
-
-This script will:
-- Create or update your VS Code user settings file
-- Save your Unsloth API key and context length
-- Store settings in `%APPDATA%\Code\User\settings.json` on Windows
 
 ## API Coverage
 
@@ -123,9 +111,9 @@ MODEL_CONTEXT_LENGTH=65536
 
 ### Loading the Model in Unsloth
 
-**Crucially**, you must load your model in Unsloth with the same context length you set in `.env`. Unsloth's OpenAI-compatible API returns the context length from the loaded model, and the proxy uses that value. If you don't load the model with the correct context length in Unsloth, the proxy will report the wrong context length to Copilot.
+The proxy uses your configured `MODEL_CONTEXT_LENGTH` value (from `.env` or VS Code settings). Load any model you want in Unsloth — the proxy doesn't automatically detect the model's context window. You need to manually set `MODEL_CONTEXT_LENGTH` to match your model's actual context size.
 
-For example, if you want 65536 context but load the model in Unsloth with a smaller context, the proxy will report that smaller value to Copilot, ignoring your `.env` setting.
+For example, if you load a model with 65536 context in Unsloth but leave `MODEL_CONTEXT_LENGTH` at the default 32768, the proxy will report 32768 to Copilot (not the actual 65536).
 
 ### Architecture-Specific Context Length
 
