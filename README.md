@@ -132,7 +132,3 @@ For example, if you want 65536 context but load the model in Unsloth with a smal
 The proxy automatically adds architecture-specific context length keys (e.g., `qwen35.context_length`) to the `/api/show` response. This ensures VS Code Copilot correctly reads the context length instead of falling back to the default 32768.
 
 If you're using a custom model architecture, ensure `_guess_details()` in `translate.py` correctly identifies it so the appropriate context length key is generated.
-
-## License
-
-MIT
