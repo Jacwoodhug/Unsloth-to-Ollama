@@ -2,6 +2,8 @@
 
 A FastAPI proxy server that translates Ollama API requests to Unsloth's OpenAI-compatible API.
 
+[Unsloth Studio Extension version available now](https://github.com/Jacwoodhug/ollama-api-unsloth-extension)
+
 ## Features
 
 - **Ollama-compatible API** on port `11434`
